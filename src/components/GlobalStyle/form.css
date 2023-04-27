@@ -1,0 +1,36 @@
+.form {
+    margin: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group input,
+.form-group select {
+    max-width: 400px;
+    height: 40px;
+    outline: none;
+}
+
+.form-group textarea {
+    max-width: 400px;
+    height: 200px;
+    outline: none;
+}
+
+.form-group-hor {
+    display: flex;
+    gap: 20px;
+}
+
+.form-check {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}

@@ -1,0 +1,14 @@
+.btn {
+    outline: none;
+    border: 0px;
+    border-radius: 0.25rem;
+}
+
+.btn:hover {
+    cursor: pointer;
+}
+
+.danger {
+    color: white;
+    background-color: #dc3545;
+}

@@ -1,0 +1,36 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    gap: 40px;
+}
+
+.sidebar {
+    width: 200px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.page {
+    flex: 1;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 0px 40px;
+}
+
+.footer {
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

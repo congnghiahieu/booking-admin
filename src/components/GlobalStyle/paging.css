@@ -1,0 +1,10 @@
+.paging-nav {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.paging-btn {
+    width: 40px;
+    height: 40px;
+}

@@ -1,0 +1,36 @@
+:root {
+    --preview-size: 150px;
+    --preview-col: 8;
+    --big-preview-size: 250px;
+    --big-preview-col: 4;
+}
+
+.preview {
+    display: grid;
+    grid-template-columns: repeat(var(--preview-col), var(--preview-size));
+    gap: 10px 10px;
+}
+.big-preview {
+    display: grid;
+    grid-template-columns: repeat(var(--big-preview-col), var(--big-preview-size));
+    gap: 10px 10px;
+}
+
+.preview-img {
+    width: var(--preview-size);
+    height: var(--preview-size);
+    object-fit: cover;
+}
+
+.big-img {
+    width: var(--big-preview-size);
+    height: var(--big-preview-size);
+    object-fit: cover;
+}
+
+.preview-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}

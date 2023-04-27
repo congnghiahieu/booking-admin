@@ -1,0 +1,16 @@
+.edit-page {
+    display: flex;
+    flex-direction: row;
+}
+
+.edit-content {
+    flex: 1;
+}
+
+.edit-opt {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 40px;
+}
