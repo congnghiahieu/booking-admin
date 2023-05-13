@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import ProvinceMapping from '../../utils/ProvinceMapping.json'
 const provinces = Object.values(ProvinceMapping).map(v => v.name)
 const HotelList = () => {
-    const [province, setProvince] = useState('Hà Nội');
     const [page, setPage] = useState(1);
     const {
         data: hotels,
