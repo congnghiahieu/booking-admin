@@ -12,7 +12,7 @@ const HotelList = () => {
         isError,
         isFetching,
     } = useGetAllHotelsQuery({ page, perPage: 1 });
-
+    console.log(hotels)
     return (
         <>
             {isLoading && <div>...Loading</div>}
@@ -34,7 +34,7 @@ const HotelList = () => {
                             <ul>
                                 {hotels.ids.map(id => {
                                     const hotel = hotels.entities[id];
-
+                                    console.log(hotel.location.province)
                                     return (
                                         <li key={id} className='item'>
                                             <HotelItem user={hotel} />
