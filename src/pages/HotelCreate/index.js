@@ -15,11 +15,11 @@ const HotelCreate = () => {
     const [phone, setPhone] = useState('0987654321');
     const [desc, setDesc] = useState('');
     const [nation, setNation] = useState('Việt Nam');
-    const [province, setProvince] = useState('Hà Nội');
+    const [province, setProvince] = useState('Đà Nẵng');
     const [district, setDistrict] = useState('');
     const [others, setOthers] = useState('');
     const [stars, setStars] = useState(4);
-    const [point, setPoint] = useState(0);
+    const [point, setPoint] = useState(8.9);
 
     const [addErr, setAddErr] = useState('');
 
