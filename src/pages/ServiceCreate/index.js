@@ -1,6 +1,7 @@
 import { useAddServiceMutation } from '../../app/features/api/servicesSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { getRan, getDiscount } from '../../utils/random';
 
 const ServiceCreate = () => {
     const navigate = useNavigate();
@@ -9,49 +10,32 @@ const ServiceCreate = () => {
     const [hotelId, setHotelId] = useState('');
     const [name, setName] = useState('');
     const [prices, setPrices] = useState(1000);
-    const [totalRooms, setTotalRooms] = useState(5);
-    const [availableRooms, setAvailableRooms] = useState(5);
+    const [point, setPoint] = useState();
+    const [discount, setDiscount] = useState();
+    const [totalRooms, setTotalRooms] = useState(10);
+    const [availableRooms, setAvailableRooms] = useState(10);
     const [beds, setBeds] = useState(1);
     const [area, setArea] = useState(35);
-    const [files, setFiles] = useState([]);
 
     const [addErr, setAddErr] = useState('');
-    const [preview, setPreview] = useState([]);
 
     const canSave =
-        [hotelId, name, prices, totalRooms, availableRooms].every(Boolean) &&
-        files.length &&
-        !isLoading;
-
-    // Clean up function fo clear old preview
-    useEffect(() => {
-        return () => {
-            if (preview.length) {
-                preview.forEach(pr => URL.revokeObjectURL(pr));
-            }
-        };
-    }, [preview]);
-    const onFilesChange = e => {
-        setFiles(e.target.files);
-        // Create blob url for preview upload img
-        setPreview(Array.from(e.target.files).map(file => URL.createObjectURL(file)));
-    };
+        [hotelId, name, prices, totalRooms, availableRooms].every(Boolean) && !isLoading;
 
     const onAddService = async () => {
         if (canSave) {
-            const formData = new FormData();
-            Object.keys(files).forEach(key => {
-                formData.append(files.item(key).name, files.item(key));
-            });
-            formData.append('hotelId', hotelId);
-            formData.append('name', name);
-            formData.append('prices', prices);
-            formData.append('totalRooms', totalRooms);
-            formData.append('availableRooms', availableRooms);
-            formData.append('beds', beds);
-            formData.append('area', area);
             try {
-                await addService(formData).unwrap();
+                await addService({
+                    hotelId,
+                    name,
+                    prices,
+                    point,
+                    discount,
+                    totalRooms,
+                    availableRooms,
+                    beds,
+                    area,
+                }).unwrap();
 
                 navigate('/services');
             } catch (err) {
@@ -64,6 +48,7 @@ const ServiceCreate = () => {
     return (
         <>
             {addErr && <div>{addErr}</div>}
+            <p>Chú ý: Thêm image sau</p>
             <section className='edit-page'>
                 <main className='edit-content'>
                     <form className='form'>
@@ -92,6 +77,28 @@ const ServiceCreate = () => {
                             />
                         </div>
                         <div className='form-group'>
+                            <label htmlFor='point'>Point **Không bắt buộc**</label>
+                            <input
+                                type='number'
+                                step={0.1}
+                                min={0}
+                                max={10}
+                                value={point}
+                                onChange={e => setPoint(e.target.value)}
+                            />
+                        </div>
+                        <div className='form-group'>
+                            <label htmlFor='discount'>Discount **Không bắt buộc**</label>
+                            <input
+                                type='number'
+                                min={0}
+                                max={100}
+                                step={1}
+                                value={discount}
+                                onChange={e => setDiscount(e.target.value)}
+                            />
+                        </div>
+                        <div className='form-group'>
                             <label htmlFor='totalRooms'>Total rooms</label>
                             <input
                                 type='text'
@@ -111,7 +118,10 @@ const ServiceCreate = () => {
                         <div className='form-group'>
                             <label htmlFor='beds'>Beds</label>
                             <input
-                                type='text'
+                                type='number'
+                                step={1}
+                                min={1}
+                                max={10}
                                 value={beds}
                                 onChange={e => setBeds(e.target.value)}
                             />
@@ -119,31 +129,13 @@ const ServiceCreate = () => {
                         <div className='form-group'>
                             <label htmlFor='area'>Area</label>
                             <input
-                                type='text'
+                                type='number'
+                                step={1}
+                                min={1}
+                                max={200}
                                 value={area}
                                 onChange={e => setArea(e.target.value)}
                             />
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor='files'>Image files</label>
-                            <input
-                                type='file'
-                                multiple
-                                onChange={onFilesChange}
-                                accept='.jpg, .jpeg'
-                            />
-                            <div className='preview'>
-                                {preview.map((pr, i) => {
-                                    return (
-                                        <img
-                                            key={i}
-                                            src={pr}
-                                            className='preview-img'
-                                            alt='preview upload'
-                                        />
-                                    );
-                                })}
-                            </div>
                         </div>
                     </form>
                 </main>

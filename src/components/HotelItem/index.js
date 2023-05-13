@@ -15,7 +15,7 @@ const HotelItem = ({ user: hotel }) => {
                 <p>Tiêu đề : {hotel.title}</p>
                 <p>Slug: {hotel.slug}</p>
                 <p>Quốc gia: {hotel.location.nation}</p>
-                <p>Thành phố: {hotel.location.city}</p>
+                <p>Tỉnh thành: {hotel.location.province}</p>
                 <p>
                     Quận huyện: {hotel?.location?.province || 'Chưa cập nhật quận'},
                     {hotel?.location?.others || 'chưa cập nhật địa chỉ cụ thể'}

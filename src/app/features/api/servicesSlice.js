@@ -117,32 +117,37 @@ export const servicesApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: [{ type: 'Service', id: 'LIST' }],
         }),
         getServiceImgById: builder.query({
-            query: id => `/v1/services/images/${id}`,
+            query: serviceId => `/v1/services/images?service_id=${serviceId}`,
             providesTags: (result, error, arg) => {
                 return [{ type: 'ServiceImage', id: arg }];
             },
         }),
         addServiceImgById: builder.mutation({
-            query: ({ id, data }) => ({
-                url: `/v1/services/images/${id}`,
+            query: ({ serviceId, data }) => ({
+                url: `/v1/services/images`,
                 method: 'POST',
                 body: data,
             }),
-            invalidatesTags: (result, error, arg) => [{ type: 'ServiceImage', id: arg.id }],
+            invalidatesTags: (result, error, arg) => [{ type: 'ServiceImage', id: arg.serviceId }],
         }),
-        deleteServiceImgByName: builder.mutation({
-            query: ({ id, imageName }) => ({
-                url: `/v1/services/images/${id}?image_name=${imageName}`,
+        deleteServiceImgByImgId: builder.mutation({
+            query: ({ serviceId, imageId }) => ({
+                url: `/v1/services/images`,
                 method: 'DELETE',
+                body: { serviceId, imageId },
             }),
-            invalidatesTags: (result, error, arg) => [{ type: 'ServiceImage', id: arg.id }],
+            invalidatesTags: (result, error, arg) => [{ type: 'ServiceImage', id: arg.serviceId }],
         }),
         deleteAllServiceImg: builder.mutation({
-            query: ({ id }) => ({
-                url: `/v1/services/images/${id}?image_name=all`,
+            query: ({ serviceId, all }) => ({
+                url: `/v1/services/images`,
                 method: 'DELETE',
+                body: {
+                    serviceId,
+                    all,
+                },
             }),
-            invalidatesTags: (result, error, arg) => [{ type: 'ServiceImage', id: arg.id }],
+            invalidatesTags: (result, error, arg) => [{ type: 'ServiceImage', id: arg.serviceId }],
         }),
     }),
 });
@@ -157,6 +162,6 @@ export const {
     useDeleteServiceByHotelIdMutation,
     useGetServiceImgByIdQuery,
     useAddServiceImgByIdMutation,
-    useDeleteServiceImgByNameMutation,
+    useDeleteServiceImgByImgIdMutation,
     useDeleteAllServiceImgMutation,
 } = servicesApiSlice;

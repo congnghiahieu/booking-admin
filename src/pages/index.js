@@ -19,3 +19,4 @@ export { default as ServiceImage } from './ServiceImage';
 export { default as TransList } from './TransList';
 export { default as CmtCreate } from './CmtCreate';
 export { default as BookCreate } from './BookCreate';
+export { default as LoginSuccess } from './LoginSuccess';

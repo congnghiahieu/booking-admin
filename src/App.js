@@ -21,6 +21,7 @@ import {
     TransList,
     CmtCreate,
     BookCreate,
+    LoginSuccess,
 } from './pages';
 import { Layout } from './components';
 
@@ -30,6 +31,7 @@ const App = () => {
             <Routes>
                 <Route path='/' element={<Layout />}>
                     <Route index element={<Home />} />
+                    <Route path='login/success' element={<LoginSuccess />} />
 
                     <Route path='users'>
                         <Route index element={<UserList />} />

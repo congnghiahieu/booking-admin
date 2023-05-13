@@ -1,6 +1,7 @@
 import { useAddHotelMutation } from '../../app/features/api/hotelsSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { getRan } from '../../utils/random';
 
 const STARS_LIST = [1, 2, 3, 4, 5];
 
@@ -10,58 +11,39 @@ const HotelCreate = () => {
 
     const [name, setName] = useState('');
     const [title, setTitle] = useState('');
-    const [nation, setNation] = useState('Việt Nam');
-    const [city, setCity] = useState('Hồ Chí Minh');
-    const [province, setProvince] = useState('');
-    const [others, setOthers] = useState('');
     const [email, setEmail] = useState('hotel@gmail.com');
     const [phone, setPhone] = useState('0987654321');
     const [desc, setDesc] = useState('');
-    const [files, setFiles] = useState([]);
+    const [nation, setNation] = useState('Việt Nam');
+    const [province, setProvince] = useState('Hà Nội');
+    const [district, setDistrict] = useState('');
+    const [others, setOthers] = useState('');
     const [stars, setStars] = useState(4);
+    const [point, setPoint] = useState(0);
 
     const [addErr, setAddErr] = useState('');
-    const [preview, setPreview] = useState([]);
 
     const canSave =
-        [name, title, phone, email, desc, nation, city].every(Boolean) &&
-        files.length &&
-        !isLoading;
-
-    // Clean up function fo clear old preview
-    useEffect(() => {
-        return () => {
-            if (preview.length) {
-                preview.forEach(pr => URL.revokeObjectURL(pr));
-            }
-        };
-    }, [preview]);
-    const onFilesChange = e => {
-        setFiles(e.target.files);
-        // Create blob url for preview upload img
-        setPreview(Array.from(e.target.files).map(file => URL.createObjectURL(file)));
-    };
+        [name, title, phone, email, desc, nation, province].every(Boolean) && !isLoading;
 
     const onAddHotel = async () => {
         if (canSave) {
-            const formData = new FormData();
-            Object.keys(files).forEach(key => {
-                formData.append(files.item(key).name, files.item(key));
-            });
-            formData.append('name', name);
-            formData.append('title', title);
-            formData.append('nation', nation);
-            formData.append('city', city);
-            formData.append('province', province);
-            formData.append('others', others);
-            formData.append('email', email);
-            formData.append('phone', phone);
-            formData.append('desc', desc);
-            formData.append('stars', stars);
             try {
-                await addHotel(formData).unwrap();
+                await addHotel({
+                    name,
+                    title,
+                    email,
+                    phone,
+                    desc,
+                    nation,
+                    province,
+                    district,
+                    others,
+                    stars,
+                    point,
+                }).unwrap();
 
-                navigate('/hotels');
+                navigate(`/hotels`);
             } catch (err) {
                 console.log(err);
                 setAddErr(`${err.status}: ${err.data.message}`);
@@ -72,6 +54,7 @@ const HotelCreate = () => {
     return (
         <>
             {addErr && <div>{addErr}</div>}
+            <p>Chú ý: Thêm image sau</p>
             <section className='edit-page'>
                 <main className='edit-content'>
                     <form className='form'>
@@ -100,19 +83,19 @@ const HotelCreate = () => {
                             />
                         </div>
                         <div className='form-group'>
-                            <label htmlFor='city'>City</label>
-                            <input
-                                type='text'
-                                value={city}
-                                onChange={e => setCity(e.target.value)}
-                            />
-                        </div>
-                        <div className='form-group'>
-                            <label htmlFor='province'>Province *Không bắt buộc*</label>
+                            <label htmlFor='province'>Province</label>
                             <input
                                 type='text'
                                 value={province}
                                 onChange={e => setProvince(e.target.value)}
+                            />
+                        </div>
+                        <div className='form-group'>
+                            <label htmlFor='district'>District *Không bắt buộc*</label>
+                            <input
+                                type='text'
+                                value={district}
+                                onChange={e => setDistrict(e.target.value)}
                             />
                         </div>
                         <div className='form-group'>
@@ -144,27 +127,6 @@ const HotelCreate = () => {
                             <textarea value={desc} onChange={e => setDesc(e.target.value)} />
                         </div>
                         <div className='form-group'>
-                            <label htmlFor='files'>Image files</label>
-                            <input
-                                type='file'
-                                multiple
-                                onChange={onFilesChange}
-                                accept='.jpg, .jpeg'
-                            />
-                            <div className='preview'>
-                                {preview.map((pr, i) => {
-                                    return (
-                                        <img
-                                            key={i}
-                                            src={pr}
-                                            className='preview-img'
-                                            alt='preview upload'
-                                        />
-                                    );
-                                })}
-                            </div>
-                        </div>
-                        <div className='form-group'>
                             <label htmlFor='stars'>Stars</label>
                             <select onChange={e => setStars(e.target.value)} value={stars}>
                                 {STARS_LIST.map(v => (
@@ -173,6 +135,19 @@ const HotelCreate = () => {
                                     </option>
                                 ))}
                             </select>
+                        </div>
+                        <div className='form-group'>
+                            <label htmlFor='point'>
+                                Point **Không bắt buộc** **Theo số phẩy** VD: 8,9
+                            </label>
+                            <input
+                                type='number'
+                                step='0.1'
+                                min={0}
+                                max={10}
+                                value={point}
+                                onChange={e => setPoint(e.target.value)}
+                            />
                         </div>
                     </form>
                 </main>

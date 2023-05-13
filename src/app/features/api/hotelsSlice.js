@@ -80,32 +80,37 @@ export const hotelsApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: [{ type: 'Hotel', id: 'LIST' }],
         }),
         getHotelImgById: builder.query({
-            query: id => `/v1/hotels/images/${id}`,
+            query: hotelId => `/v1/hotels/images?hotel_id=${hotelId}`,
             providesTags: (result, error, arg) => {
                 return [{ type: 'HotelImage', id: arg }];
             },
         }),
         addHotelImgById: builder.mutation({
-            query: ({ id, data }) => ({
-                url: `/v1/hotels/images/${id}`,
+            query: ({ hotelId, data }) => ({
+                url: `/v1/hotels/images`,
                 method: 'POST',
                 body: data,
             }),
-            invalidatesTags: (result, error, arg) => [{ type: 'HotelImage', id: arg.id }],
+            invalidatesTags: (result, error, arg) => [{ type: 'HotelImage', id: arg.hotelId }],
         }),
-        deleteHotelImgByName: builder.mutation({
-            query: ({ id, imageName }) => ({
-                url: `/v1/hotels/images/${id}?image_name=${imageName}`,
+        deleteHotelImgByImgId: builder.mutation({
+            query: ({ hotelId, imageId }) => ({
+                url: `/v1/hotels/images`,
                 method: 'DELETE',
+                body: { hotelId, imageId },
             }),
-            invalidatesTags: (result, error, arg) => [{ type: 'HotelImage', id: arg.id }],
+            invalidatesTags: (result, error, arg) => [{ type: 'HotelImage', id: arg.hotelId }],
         }),
         deleteAllHotelImg: builder.mutation({
-            query: ({ id }) => ({
-                url: `/v1/hotels/images/${id}?image_name=all`,
+            query: ({ hotelId, all }) => ({
+                url: `/v1/hotels/images`,
                 method: 'DELETE',
+                body: {
+                    hotelId,
+                    all,
+                },
             }),
-            invalidatesTags: (result, error, arg) => [{ type: 'HotelImage', id: arg.id }],
+            invalidatesTags: (result, error, arg) => [{ type: 'HotelImage', id: arg.hotelId }],
         }),
     }),
 });
@@ -118,6 +123,6 @@ export const {
     useDeleteHotelMutation,
     useGetHotelImgByIdQuery,
     useAddHotelImgByIdMutation,
-    useDeleteHotelImgByNameMutation,
+    useDeleteHotelImgByImgIdMutation,
     useDeleteAllHotelImgMutation,
 } = hotelsApiSlice;
